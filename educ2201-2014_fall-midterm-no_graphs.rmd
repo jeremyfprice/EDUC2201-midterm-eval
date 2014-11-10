@@ -1,0 +1,211 @@
+---
+title: "EDUC2201 Fall Midterm Evaluation"
+author: "Dr. Jeremy Price"
+date: "Friday, October 31, 2014"
+output: pdf_document
+documentclass: article
+---
+\fontfamily{ppl}\selectfont
+```{r, echo=FALSE, error=FALSE, message=FALSE, warning=FALSE}
+
+setwd("C:/Users/jprice27/Dropbox/Scholarly Work/R/educ2201-fall2014/eval-midterm")
+
+#Load necessary libraries
+library(xtable)
+
+#Load data set
+eval_input = read.csv("educ2201-midterm-fall-2014.csv", header = TRUE)
+eval_data <- na.omit(eval_input) #omit rows with empty data
+attach(eval_data) #make the data more easily usable
+
+headings <- c("Prompt", "Strongly Agree", "Agree", "Disagree", "Strongly Disagree")
+contech <- c("This course helped me consider technology in a different way.", length(which(eval_data[2] == 1)), length(which(eval_data[2] == 2)), length(which(eval_data[2] == 3)), length(which(eval_data[2] == 4)))
+conteach <- c("This course helped me consider teaching in a different way.", length(which(eval_data[3] == 1)), length(which(eval_data[3] == 2)), length(which(eval_data[3] == 3)), length(which(eval_data[3] == 4)))
+digitalmat <- c("This course helped me feel confident to develop digital materials to support learning.", length(which(eval_data[4] == 1)), length(which(eval_data[4] == 2)), length(which(eval_data[4] == 3)), length(which(eval_data[4] == 4)))
+techteach <- c("This course helped me feel confident to teach with technology.", length(which(eval_data[5] == 1)), length(which(eval_data[5] == 2)), length(which(eval_data[5] == 3)), length(which(eval_data[5] == 4)))
+frameworks <- c("This course provided useful frameworks for teaching with technology.", length(which(eval_data[6] == 1)), length(which(eval_data[6] == 2)), length(which(eval_data[6] == 3)), length(which(eval_data[6] == 4)))
+pathway <- c("This course has helped me on my path to becoming a member of the technology-using teaching profession.", length(which(eval_data[7] == 1)), length(which(eval_data[7] == 2)), length(which(eval_data[7] == 3)), length(which(eval_data[7] == 4)))
+
+eval_frame <- data.frame(rbind(headings, contech, conteach, digitalmat, techteach, frameworks, pathway))
+```
+
+The students in EDUC2201 (Instructional Design) Sections 1 and 2 were asked to complete a mid-semester evaluation based on their experiences in the course so far. The evaluation was framed in two ways: first, that if I as the instructor was expected to provide an evaluation of students at the mid-semester point, it is only fair for students to provide an evaluation of the instructor; and second, this is their opportunity to make suggestions for providing feedback in terms of what is going well in the course and how they would like to see the course changed or improved.
+
+##Methods
+
+The students were presented with the survey on [Qualtrics](http://www.qualtrics.com/) and were not asked to input their names and I left the room while they were completing the survey, meaning that the evaluation was completely anonymous.  The students' responses were collected into a spreadsheet and then organized and analyzed with the [RStudio](http://www.rstudio.com/) statistics package. The open-ended responses were coded into categories with the [Atlast.ti](http://www.atlasti.com/) qualitative data analysis software and compiled into frequency charts. Exemplary quotes were selected to illustrate these categories.
+
+##Format of this Report
+The results of the open ended responses are reported first. The question prompt for the students is provided with a brief explanation of the purpose of the question. A table is then provided with the frequency of each coded category with exemplary quotes, followed by a bar chart. A section labeled "Way Forward" is then provided to indicate the directions I will take in my course and in my teaching with respect to the students' evaluation of the course. Likert scale responses are then reported following a similar format, ending in a "Way Forward" section.
+
+
+\pagebreak
+
+#Course Strengths
+
+\begin{center}
+
+\textit{What are the strongest features of this course and of my teaching? In other words, what contributes most to your learning?}
+
+\end{center}
+
+Students were asked to identify the characteristic strengths of the course and of my teaching.
+
+##Coded Responses
+
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCS <- data.frame(tools = factor(c("Learning Environment", "Exposure to Technology", "Hands-On Work", "Projects", "Class Discussions", "Group Work", "Preparation for Teaching", "Cognitive Warm-Ups", "Handouts")), freq = factor(c(11, 5, 3, 3, 2, 2, 2, 2, 1)), equotes = factor(c('"I really like that everybody can be open and that its not an up-tight environment. We are not afraid of making mistakes or anything like that.", "I like how understanding you are with everyone. I like that you give us time to finish our work, and actually care that we understand what youre teaching.", "...You take the time to work with students individually to help them learn. You also express a lot of knowledge about your course."','"I like how we use technology to help us learn because it is part of our lives and it is easier to understand.", "I think I have benefited the most of the websites/tools to do assignments on."','"Hands on activities such as this last activity."','"I like the steps being laid out for the webquest and our accessibility to these items."','"When we have class discussions."','"free exploration with group activities."','"I learned to teach people through technology."','"I like the warm-ups that get me to wake up, I also like how I feel like I get some independence in my work."',' ')))
+daTable <- xtable(dtCS, caption = "Course Strengths Identified by Students")
+align(daTable)<-"lp{1.75in}p{0.75in}p{3.5in}"
+colnames(daTable) <- c("Identified Strengths", "Frequency", "Example Quotes")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+* Continue to focus on facilitating a strong learning environment that includes developing relationships with all students and providing the tools and scaffolding necessary for individual student success.
+* Continue to provide focused exposure to digital tools important for teaching and learning.
+* Provide more explicit connections between the models of teaching I provide and the pedagogical practices I hope students will adopt.
+
+\pagebreak
+
+#Course Changes
+
+\begin{center}
+
+\textit{What specific suggestions do you have for changes that I can make to improve the course or how it is taught?}
+
+\end{center}
+
+Students were asked to provide suggestions for improving the course.
+
+##Coded Responses
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCC <- data.frame(tools = factor(c("Clearer Explanations", "More Time", "Better Structure", "More Hands-On", "Fewer Submissions", "More Direct Technology Instruction")), freq = factor(c(6, 3, 2, 1, 1, 1)), equotes = factor(c('"Explain things in better detail.", "My biggest struggle in this course was feeling lost at times. I felt that I didnt fully understand how or why we were doing things. I think clearer instruction would improve the course so new students understand the reason for what we do before we begin it."', '"More time in class to do work in class.", "I feel we waste a lot of time sometimes."', '"More structure of outcomes.", "I think we should try to do one thing at a time."', '"More hands on teaching."', '"We use alot of things for task stream and we just should use it for the big things. Its alot to turn things in."', '"At the beginning of the semester take a day to show students how to access all computer and internet programs for those who are either not tech savvy, have not used computers or internet much or have a hard time connecting learning to the internet."')))
+daTable <- xtable((dtCC))
+align(daTable)<-"lp{1.75in}p{0.75in}p{3.5in}"
+colnames(daTable) <- c("Recommended Changes", "Frequency", "Example Quotes")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+* The first unit (WebQuest) that we accomplished together was a pilot unit, and thus not as well polished as other aspects of the course. However, the fact that "Clarity" ranked as the highest indicated suggestion for improvement serves as a reminder to ensure that directions and expectations are clear up-front, irrespective of the how polished an educational unit is.
+* Provide more structured opportunities for students to engage in intellectual risk-taking so that students feel more comfortable making--and recovering from--mistakes eariler on.
+* Provide more time in-class for working on projects.
+* Consider offering a 1-2 hour "lab" outside of classtime the first week of the semester to introduce students to the technologies, services and software they will be using over the course of the semester.
+
+\pagebreak
+
+#Course Experiences
+
+\begin{center}
+
+\textit{What course experiences were the most interesting and/or useful to you and why?}
+
+\end{center}
+
+Beyond the strengths and suggested changes, students were asked to identify specific experiences in class that were interesting or useful.
+
+##Coded Responses
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCE <- data.frame(tools = factor(c("Videos", "Group Work", "Posters on Diversity", "Relationships", "Core Preparation", "Texting", "Cognitive Warm-Ups", "Book Report on Peter Rabbit", "Introduction to Digital Tools", "One-on-One Meeting", "Pepperoni Roll Rubric", "Presentations", "Socrative", "TaskStream")), freq = factor(c(5, 3, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)), equotes = factor(c('"...Id learned so much things from that guy in the video.", "The videos that we watched."', '"The fact that everyone was always interacting with each other was very heplful to me to help break me out of my shell a little bit.", "Group work was helpful because it gives us practice for the future."', '"The diversity assignment was interesting because it made me look at teaching differently.", "The building of the poster was fun and interactive."', '"Did not really have much to do with the course but until I met you I never really felt teachers cared about my success.", "I like that my education classes are more personal, that I get to know my professors more, and I can be more comfortable in class."', '"The essays to prepare us for the core."', '"The videos on texting and language."', '"The most useful experience was our cognititve warm-ups. I know this isnt anything that has to do with technology, but it was the most useful and interestiing to me. It got the class going, and made the atmosphere more comfortable. I really think it was a good way to begin, get us going, and made me more comfortable with the class."', '"I liked when we watched the Charlie Brown Special on when they were studying to help us find out what our study habits were."', '"...The different tools we used."', '"I liked the meeting we had with you, you helped me understand taskstream more and introduced me to my advisor! Thank you for that!!"', '"Pepperoni roll comparison to rubric"', '"Videos and power points that were used."', '"Using the website to ask questions about the core test."', '"Taskstream has helped kept everything organized."')))
+daTable <- xtable((dtCE))
+align(daTable)<-"lp{1.75in}p{0.75in}p{3.5in}"
+colnames(daTable) <- c("Experience", "Frequency", "Example Quotes")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+
+* Facilitate a learning environment focused on relationships and pathways for student success.
+* Further link course experiences to personal knowledge and experiences.
+* Include connections with the students' journeys from high school to university to teaching.
+* The early focus on Core Exam preparation was found to be important, so continue that with a closer and more focused connection with course content.
+
+\pagebreak
+
+#Thinking About Technology
+
+\begin{center}
+
+\textit{In what ways has your thinking about teaching with technology in general changed?}
+
+\end{center}
+
+Students were asked to reflect on the way they think about teaching with technology and to identify the most useful and interesting digital tools.
+
+##Coded Responses
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCT <- data.frame(tools = factor(c("Attitude", "Knowledge", "Necessity", "Confidence")), freq = factor(c(8, 6, 3, 2)), equotes = factor(c('"I am more willing to use technology now than I was before.", "It has approved the idea of the usefulness of teaching with technology."', '"I learned about more ways to incorporate technology in the classroom (certain websites and videos).", "There are more ways to teach with technology than I alreay knew of."', '"I wasnt thinking of using technology while teaching, but i realized that i will need to.", "I am more willing to use technology now than I was before. "', '"I now feel more comfortable with using technology while teaching."')))
+daTable <- xtable((dtCT))
+align(daTable)<-"lp{1.75in}p{0.75in}p{3.5in}"
+colnames(daTable) <- c("Changes in Thinking", "Frequency", "Example Quotes")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Identified Digital Tools
+
+\begin{center}
+
+\textit{What digital tools were the most interesting and/or useful to you and why?}
+
+\end{center}
+
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCR <- data.frame(tools = factor(c("ScreenChomp", "Glogster", "Mind Mapping", "Google Drive", "TaskStream", "Laptops", "TodaysMeet", "Trello", "Socrative")), freq = factor(c(7, 6, 5, 3, 3, 2, 2, 2, 1)))
+daTable <- xtable((dtCR))
+align(daTable)<-"lp{5in}p{1in}"
+colnames(daTable) <- c("Tool", "Frequency")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+* Continue to provide exposure to a variety of digital tools, especially those that allow for personal expression and organization.
+* Develop opportunities to build confidence in teaching with technology.
+* Continue to support open-minded attitudes towards and awareness of using technology in education.
+
+\pagebreak
+
+
+
+#Pathway from Student to Educator
+
+\begin{center}
+
+\textit{This course has helped me on my path to becoming a member of the technology-using teaching profession.}
+
+\end{center}
+
+The ultimate goal of this course is provide teacher candidates with the tools, practices and knowledge to be well-prepared teachers and to promote membership in the community of technology-using teachers.
+
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+
+DF <- data.frame(tools = factor(c("Strongly Agree", "Agree", "Disagree", "Strongly Disagree")), freq = factor(c(9, 15, 1, 0)), equotes = factor(c('"Before this course I never really used technology outside of Facebook and e-mail. Now I know how to use it as a teaching tool.", "It has introduced me to technology I didnt even know existed and I feel that it makes me feel more comfortable with teaching with the technology.", "I feel like I can now be more creative."', '"I do not fear the idea of technology in a classroom. I can see how it benefits children.", "I am confident with technology but I may not use all of the technology we learned about.", "I realized how important technology really is in life, and it is a good idea to embrace it as a teacher.", "I want to be able to use technology in teaching, but i dont want to use it for everything."', '"I dont remember the website names and which one was which and we used them once."', ' ')))
+daTable <- xtable((DF))
+align(daTable)<-"lp{1.25in}p{0.75in}p{4in}"
+colnames(daTable) <- c("Pathway", "Frequency", "Example Quotes")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Considerations and Confidence
+Shifts in thinking and confidence are indicators of feelings of improved efficacy and the alignment of practices, feeding into membership of the community of technology-using teachers.
+
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+#print(eval_frame[2:6,])
+DF <- read.table(text="Prompt 'Strongly Agree'     Agree     Disagree    'Strongly Disagree'
+'This course helped me consider technology in a different way.'    9    14    0    2
+'This course helped me consider teaching in a different way.'    11   12    0    2
+'This course helped me feel confident to develop digital materials to support learning.'    6    16    1    2
+'This course helped me feel confident to teach with technology.'    8    11    2    2
+'This course provided useful frameworks for teaching with technology.'    11   12    0    2", header=TRUE)
+
+#daTable <- xtable((eval_frame[2:6,]))
+daTable <- xtable((DF))
+align(daTable)<-"lp{3in}p{0.75in}p{0.75in}p{0.75in}p{0.75in}"
+colnames(daTable) <- c(headings)
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+* Make sure to not lose sight of the nitty-gritty details and provide a running list of services and software used in class.
+* Continue to build on teacher candidates' experiences with technology and build them out to becoming teachers-with-technology.
+* Make more explicit and stronger connections between routines and practices, technologies, and membership in the teaching communities of practice.
