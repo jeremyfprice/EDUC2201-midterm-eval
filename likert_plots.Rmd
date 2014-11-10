@@ -1,0 +1,145 @@
+---
+title: "likert_graphs"
+author: "Jeremy Price"
+date: "Sunday, November 09, 2014"
+output: pdf_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r}
+require(grid)
+require(lattice)
+require(latticeExtra)
+require(HH)
+sgbar.likert<- sgbar[,2:6]
+likert(sgbar.likert,
+main='Example Diverging Stacked Bar Chart for Likert Scale',
+sub="Likert Scale")
+ 
+likert(sgbar.likert, horizontal=FALSE,
+aspect=1.5,
+main="Example Diverging Stacked Bar Chart for Likert Scale",
+auto.key=list(space="right", columns=1,
+reverse=TRUE, padding.text=2),
+sub="Likert Scale")
+ 
+likert(sgbar.likert,
+auto.key=list(between=1, between.columns=2),
+xlab="Percentage",
+main="Example Diverging Stacked Bar Chart for Likert Scale",
+BrewerPaletteName="Blues",
+sub="Likert Scale")
+```
+
+```{r}
+# -------------------------------
+# random sample
+# -------------------------------
+# prepare data for 4-category likert scale, 5 items
+require(sjPlot)
+likert_4 <- data.frame(as.factor(sample(1:4, 500, replace=TRUE, prob=c(0.2,0.3,0.1,0.4))),
+                       as.factor(sample(1:4, 500, replace=TRUE, prob=c(0.5,0.25,0.15,0.1))),
+                       as.factor(sample(1:4, 500, replace=TRUE, prob=c(0.25,0.1,0.4,0.25))),
+                       as.factor(sample(1:4, 500, replace=TRUE, prob=c(0.1,0.4,0.4,0.1))),
+                       as.factor(sample(1:4, 500, replace=TRUE, prob=c(0.35,0.25,0.15,0.25))))
+# create labels
+levels_4 <- list(c("Independent", "Slightly dependent", "Dependent", "Severely dependent"))
+ 
+# create item labels
+items <- list(c("Q1", "Q2", "Q3", "Q4", "Q5"))
+ 
+# plot stacked frequencies of 5 (ordered) item-scales
+sjp.stackfrq(likert_4, legendLabels=levels_4, axisLabels.y=items)
+ 
+ 
+# -------------------------------
+# Data from the EUROFAMCARE sample dataset
+# -------------------------------
+data(efc)
+ 
+# recveive first item of COPE-index scale
+start <- which(colnames(efc)=="c82cop1")
+ 
+# recveive first item of COPE-index scale
+end <- which(colnames(efc)=="c90cop9")
+ 
+# retrieve variable and value labels
+varlabs <- sji.getVariableLabels(efc)
+vallabs <- sji.getValueLabels(efc)
+ 
+# create value labels. We need just one variable of
+# the COPE-index scale because they have all the same
+# level / categorie / value labels
+levels <- vallabs['c82cop1']
+ 
+# create item labels
+items <- list(varlabs[c(start:end)])
+ 
+sjp.stackfrq(efc[,c(start:end)], legendLabels=levels,
+             axisLabels.y=items, jitterValueLabels=TRUE)
+```
+```{r}
+set.seed(1234)
+library(e1071)
+probs <- cbind(c(.4,.2/3,.2/3,.2/3,.4),c(.1/4,.1/4,.9,.1/4,.1/4),c(.2,.2,.2,.2,.2))
+my.n <- 100
+my.len <- ncol(probs)*my.n
+raw <- matrix(NA,nrow=my.len,ncol=2)
+raw <- NULL
+for(i in 1:ncol(probs)){
+raw <- rbind(raw, cbind(i,rdiscrete(my.n,probs=probs[,i],values=1:5)))
+}
+ 
+r <- data.frame( cbind(
+as.numeric( row.names( tapply(raw[,2], raw[,1], mean) ) ),
+tapply(raw[,2], raw[,1], mean),
+tapply(raw[,2], raw[,1], mean) + sqrt( tapply(raw[,2], raw[,1], var)/tapply(raw[,2], raw[,1], length) ) * qnorm(1-.05/2,0,1),
+tapply(raw[,2], raw[,1], mean) - sqrt( tapply(raw[,2], raw[,1], var)/tapply(raw[,2], raw[,1], length) ) * qnorm(1-.05/2,0,1)
+))
+names(r) <- c("group","mean","ll","ul")
+ 
+gbar <- tapply(raw[,2], list(raw[,2], raw[,1]), length)
+ 
+sgbar <- data.frame( cbind(c(1:max(unique(raw[,1]))),t(gbar)) )
+ 
+sgbar.likert<- sgbar[,2:6]
+```
+
+```{r, echo=FALSE, error=FALSE, message=FALSE, warning=FALSE}
+
+setwd("C:/Users/jprice27/Dropbox/Scholarly Work/R/educ2201-fall2014/eval-midterm")
+
+#Load necessary libraries
+library(xtable)
+
+#Load data set
+eval_input = read.csv("educ2201-midterm-fall-2014.csv", header = TRUE)
+eval_data <- na.omit(eval_input) #omit rows with empty data
+attach(eval_data) #make the data more easily usable
+
+headings <- c("Prompt", "Strongly Agree", "Agree", "Disagree", "Strongly Disagree")
+contech <- c("This course helped me consider technology in a different way.", length(which(eval_data[2] == 1)), length(which(eval_data[2] == 2)), length(which(eval_data[2] == 3)), length(which(eval_data[2] == 4)))
+conteach <- c("This course helped me consider teaching in a different way.", length(which(eval_data[3] == 1)), length(which(eval_data[3] == 2)), length(which(eval_data[3] == 3)), length(which(eval_data[3] == 4)))
+digitalmat <- c("This course helped me feel confident to develop digital materials to support learning.", length(which(eval_data[4] == 1)), length(which(eval_data[4] == 2)), length(which(eval_data[4] == 3)), length(which(eval_data[4] == 4)))
+techteach <- c("This course helped me feel confident to teach with technology.", length(which(eval_data[5] == 1)), length(which(eval_data[5] == 2)), length(which(eval_data[5] == 3)), length(which(eval_data[5] == 4)))
+frameworks <- c("This course provided useful frameworks for teaching with technology.", length(which(eval_data[6] == 1)), length(which(eval_data[6] == 2)), length(which(eval_data[6] == 3)), length(which(eval_data[6] == 4)))
+pathway <- c("This course has helped me on my path to becoming a member of the technology-using teaching profession.", length(which(eval_data[7] == 1)), length(which(eval_data[7] == 2)), length(which(eval_data[7] == 3)), length(which(eval_data[7] == 4)))
+
+eval_frame <- data.frame(rbind(headings, contech, conteach, digitalmat, techteach, frameworks, pathway))
+```
+
+
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

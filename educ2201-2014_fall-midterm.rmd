@@ -1,0 +1,226 @@
+---
+title: "EDUC2201 Fall Midterm Evaluation"
+author: "Dr. Jeremy Price"
+date: "Friday, October 31, 2014"
+output: pdf_document
+---
+
+```{r, echo=FALSE, error=FALSE, message=FALSE, warning=FALSE}
+#Load necessary libraries
+library(ggplot2)
+library(xtable)
+library(tm)
+library(wordcloud)
+library(sparkTable)
+library(reshape2)
+
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+cbPalette2 <- c("#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+#Load data set
+eval_input = read.csv("educ2201-midterm-fall-2014.csv", header = TRUE)
+eval_data <- na.omit(core_input) #omit rows with empty data
+attach(eval_data) #make the data more easily usable
+
+headings <- c("Prompt", "Strongly Agree", "Agree", "Disagree", "Strongly Disagree")
+contech <- c("This course helped me consider technology in a different way.", length(which(eval_data[2] == 1)), length(which(eval_data[2] == 2)), length(which(eval_data[2] == 3)), length(which(eval_data[2] == 4)))
+conteach <- c("This course helped me consider teaching in a different way.", length(which(eval_data[3] == 1)), length(which(eval_data[3] == 2)), length(which(eval_data[3] == 3)), length(which(eval_data[3] == 4)))
+digitalmat <- c("This course helped me feel confident to develop digital materials to support learning.", length(which(eval_data[4] == 1)), length(which(eval_data[4] == 2)), length(which(eval_data[4] == 3)), length(which(eval_data[4] == 4)))
+techteach <- c("This course helped me feel confident to teach with technology.", length(which(eval_data[5] == 1)), length(which(eval_data[5] == 2)), length(which(eval_data[5] == 3)), length(which(eval_data[5] == 4)))
+frameworks <- c("This course provided useful frameworks for teaching with technology.", length(which(eval_data[6] == 1)), length(which(eval_data[6] == 2)), length(which(eval_data[6] == 3)), length(which(eval_data[6] == 4)))
+pathway <- c("This course has helped me on my path to becoming a member of the technology-using teaching profession.", length(which(eval_data[7] == 1)), length(which(eval_data[7] == 2)), length(which(eval_data[7] == 3)), length(which(eval_data[7] == 4)))
+
+eval_frame <- data.frame(rbind(headings, contech, conteach, digitalmat, techteach, frameworks, pathway))
+
+```
+The students in EDUC2201 (Instructional Design) Sections 1 and 2 were asked to complete a mid-semester evaluation based on their experiences in the course so far. The evaluation was framed in two ways: first, that if I as the instructor was expected to provide an evaluation of students at the mid-semester point, it is only fair for students to provide an evaluation of the instructor; and second, this is their opportunity to make suggestions for providing feedback in terms of what is going well in the course and how they would like to see the course changed or improved.
+
+##Methods
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+You can also embed plots, for example:
+
+\pagebreak
+
+#Course Strengths
+
+```{r, echo=FALSE, error=FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=4, results='hide'}
+
+#strengths_codes.df = read.csv("strengths-codes.txt")
+#strengths_codes.corpus <- Corpus(DataframeSource(data.frame(strengths_codes.df)))
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, removePunctuation)
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, tolower)
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, function(x) removeWords(x, stopwords("english")))
+#tdm <- TermDocumentMatrix(strengths_codes.corpus)
+#m <- as.matrix(tdm)
+#v <- sort(rowSums(m),decreasing=TRUE)
+#d <- data.frame(word = names(v),freq=v)
+
+#print(wordcloud(d$word,d$freq, scale=c(3,.3),min.freq=1,max.words=10, random.order=T, rot.per=0, colors=cbPalette, vfont=c("sans serif","bold")), width=800,height=400)
+```
+
+##Coded Responses
+
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCS <- data.frame(tools = factor(c("Learning Environment", "Exposure to Technology", "Hands-On Work", "Projects", "Class Discussions", "Group Work", "Preparation for Teaching", "Cognitive Warm-Ups", "Handouts")), freq = factor(c(11, 5, 3, 3, 2, 2, 2, 2, 1)), equotes = factor(c('"I really like that everybody can be open and that its not an up-tight environment. We are not afraid of making mistakes or anything like that.", "I like how understanding you are with everyone. I like that you give us time to finish our work, and actually care that we understand what youre teaching.", "...You take the time to work with students individually to help them learn. You also express a lot of knowledge about your course."','"I like how we use technology to help us learn because it is part of our lives and it is easier to understand.", "I think I have benefited the most of the websites/tools to do assignments on."','"Hands on activities such as this last activity."','"I like the steps being laid out for the webquest and our accessibility to these items."','"When we have class discussions."','"free exploration with group activities."','"I learned to teach people through technology."','"I like the warm-ups that get me to wake up, I also like how I feel like I get some independence in my work."',' ')))
+daTable <- xtable((dtCS))
+align(daTable)<-"lp{1.75in}p{0.75in}p{3.5in}"
+colnames(daTable) <- c("Identified Strengths", "Frequency", "Example Quotes")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+Blah blah blah.
+
+\pagebreak
+
+#Course Changes
+
+```{r, echo=FALSE, error=FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=3.5, results='hide'}
+
+#strengths_codes.df = read.csv("changes-codes.txt")
+#strengths_codes.corpus <- Corpus(DataframeSource(data.frame(strengths_codes.df)))
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, removePunctuation)
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, tolower)
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, function(x) removeWords(x, stopwords("english")))
+#tdm <- TermDocumentMatrix(strengths_codes.corpus)
+#m <- as.matrix(tdm)
+#v <- sort(rowSums(m),decreasing=TRUE)
+#d <- data.frame(word = names(v),freq=v)
+
+#print(wordcloud(d$word,d$freq, scale=c(3,.3),min.freq=1,max.words=10, random.order=T, rot.per=0, colors=cbPalette, vfont=c("sans serif", "bold")), width=800,height=400)
+```
+
+##Coded Responses
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCC <- data.frame(tools = factor(c("Clearer Explanations", "More Time", "Better Structure", "More Hands-On", "Fewer Submissions", "More Direct Technology Instruction")), freq = factor(c(6, 3, 2, 1, 1, 1)), equotes = factor(c('"Explain things in better detail.", "My biggest struggle in this course was feeling lost at times. I felt that I didnt fully understand how or why we were doing things. I think clearer instruction would improve the course so new students understand the reason for what we do before we begin it."', '"More time in class to do work in class.", "I feel we waste a lot of time sometimes."', '"More structure of outcomes.", "I think we should try to do one thing at a time."', '"More hands on teaching."', '"We use alot of things for task stream and we just should use it for the big things. Its alot to turn things in."', '"At the beginning of the semester take a day to show students how to access all computer and internet programs for those who are either not tech savvy, have not used computers or internet much or have a hard time connecting learning to the internet."')))
+daTable <- xtable((dtCC))
+align(daTable)<-"lp{1.75in}p{0.75in}p{3.5in}"
+colnames(daTable) <- c("Recommended Changes", "Frequency", "Example Quotes")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+Blah blah blah.
+
+\pagebreak
+
+#Course Experiences
+
+```{r, echo=FALSE, error=FALSE, message=FALSE, warning=FALSE, results='hide', fig.width=4, fig.height=3}
+
+#strengths_codes.df = read.csv("experiences-codes.txt")
+#strengths_codes.corpus <- Corpus(DataframeSource(data.frame(strengths_codes.df)))
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, removePunctuation)
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, tolower)
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, function(x) removeWords(x, stopwords("english")))
+#tdm <- TermDocumentMatrix(strengths_codes.corpus)
+#m <- as.matrix(tdm)
+#v <- sort(rowSums(m),decreasing=TRUE)
+#d <- data.frame(word = names(v),freq=v)
+
+#print(wordcloud(d$word,d$freq, scale=c(3,.3),min.freq=1,max.words=10, random.order=T, rot.per=0, colors=cbPalette, vfont=c("sans serif", "bold")), width=200, height=100)
+```
+
+##Coded Responses
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCE <- data.frame(tools = factor(c("Videos", "Group Work", "Posters on Diversity", "Relationships", "Core Preparation", "Texting", "Cognitive Warm-Ups", "Book Report on Peter Rabbit", "Introduction to Digital Tools", "One-on-One Meeting", "Pepperoni Roll Rubric", "Presentations", "Socrative", "TaskStream")), freq = factor(c(5, 3, 3, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1)), equotes = factor(c('"...Id learned so much things from that guy in the video.", "The videos that we watched."', '"The fact that everyone was always interacting with each other was very heplful to me to help break me out of my shell a little bit.", "Group work was helpful because it gives us practice for the future."', '"The diversity assignment was interesting because it made me look at teaching differently.", "The building of the poster was fun and interactive."', '"Did not really have much to do with the course but until I met you I never really felt teachers cared about my success.", "I like that my education classes are more personal, that I get to know my professors more, and I can be more comfortable in class."', '"The essays to prepare us for the core."', '"The videos on texting and language."', '"The most useful experience was our cognititve warm-ups. I know this isnt anything that has to do with technology, but it was the most useful and interestiing to me. It got the class going, and made the atmosphere more comfortable. I really think it was a good way to begin, get us going, and made me more comfortable with the class."', '"I liked when we watched the Charlie Brown Special on when they were studying to help us find out what our study habits were."', '"...The different tools we used."', '"I liked the meeting we had with you, you helped me understand taskstream more and introduced me to my advisor! Thank you for that!!"', '"Pepperoni roll comparison to rubric"', '"Videos and power points that were used."', '"Using the website to ask questions about the core test."', '"Taskstream has helped kept everything organized."')))
+daTable <- xtable((dtCE))
+align(daTable)<-"lp{1.75in}p{0.75in}p{3.5in}"
+colnames(daTable) <- c("Experience", "Frequency", "Example Quotes")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+
+Blah blah blah.
+
+\pagebreak
+
+#Digital Tools
+Blah blah blah.
+
+```{r, echo=FALSE, error=FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=3.5, results='hide'}
+
+#strengths_codes.df = read.csv("tools-codes.txt")
+#strengths_codes.corpus <- Corpus(DataframeSource(data.frame(strengths_codes.df)))
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, removePunctuation)
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, tolower)
+#strengths_codes.corpus <- tm_map(strengths_codes.corpus, function(x) removeWords(x, stopwords("english")))
+#tdm <- TermDocumentMatrix(strengths_codes.corpus)
+#m <- as.matrix(tdm)
+#v <- sort(rowSums(m),decreasing=TRUE)
+#d <- data.frame(word = names(v),freq=v)
+
+#print(wordcloud(d$word,d$freq, scale=c(3,.3),min.freq=1,max.words=10, random.order=T, rot.per=0, colors=cbPalette, vfont=c("sans serif", "bold")), width=400,height=200)
+
+```
+
+##Coded Responses
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+dtCR <- data.frame(tools = factor(c("ScreenChomp", "Glogster", "Mind Mapping", "Google Drive", "TaskStream", "Laptops", "TodaysMeet", "Trello", "Socrative")), freq = factor(c(7, 6, 5, 3, 3, 2, 2, 2, 1)))
+daTable <- xtable((dtCR))
+align(daTable)<-"lp{5in}p{1in}"
+colnames(daTable) <- c("Tool", "Frequency")
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+##Way Forward
+Blah blah blah.
+
+\pagebreak
+#Confidence Measures
+Blah blah blah.
+
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+daTable <- xtable((eval_frame[2:6,]))
+align(daTable)<-"lp{3in}p{0.75in}p{0.75in}p{0.75in}p{0.75in}"
+colnames(daTable) <- c(headings)
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+```{r, fig.width=7, fig.height=3, echo=FALSE, message=FALSE, warning=FALSE}
+
+DF <- read.table(text="Prompt 'Strongly Agree'     Agree     Disagree    'Strongly Disagree'
+1    9    14    0    2
+2    11   12    0    2
+3    6    16    1    2
+4    8    11    2    2
+5    11   12    0    2", header=TRUE)
+
+
+DF1 <- melt(DF, id.var="Prompt")
+
+ggplot(DF1, aes(x = Prompt, y = value, fill = variable)) + geom_bar(stat = "identity") + coord_flip() + scale_y_continuous("Frequency") + scale_x_discrete("Prompt", breaks=c(1,2,3,4,5), labels=c("Consider\nTechnology", "Consider\nTeaching", "Confidence\nDigital Materials", "Confidence\nTeaching", "Frameworks")) + scale_fill_manual(values = cbPalette2) + theme_bw() + theme(legend.text=element_text(size=8)) + scale_fill_hue(name = "Choice")
+
+```
+
+##Pathway to Teacher
+
+```{r, fig.width=3, fig.height=2, echo=FALSE, results='asis'}
+daTable <- xtable((eval_frame[7,]))
+align(daTable)<-"lp{3in}p{0.75in}p{0.75in}p{0.75in}p{0.75in}"
+colnames(daTable) <- c(headings)
+print(daTable, include.rownames = FALSE, comment = FALSE)
+```
+
+```{r, fig.width=7, fig.height=3, echo=FALSE, message=FALSE, warning=FALSE}
+
+DF <- read.table(text="Prompt 'Strongly Agree'     Agree     Disagree    'Strongly Disagree'
+6    9    15    1    0", header=TRUE)
+
+
+DF1 <- melt(DF, id.var="Prompt")
+
+ggplot(DF1, aes(x = Prompt, y = value, fill = variable)) + geom_bar(stat = "identity") + coord_flip() + scale_y_continuous("Frequency") + scale_x_discrete("Prompt", breaks=c(1), labels=c("Pathway to\nTeacher")) + scale_fill_manual(values = cbPalette2) + theme_bw() + theme(legend.text=element_text(size=8)) + scale_fill_hue(name = "Choice")
+
+```
+
+
+
+\pagebreak
+#Writing Reflections
+Blah blah.
